@@ -9,21 +9,19 @@ def pdb_to_csv(pdb_file, csv_file):
     with open(csv_file, 'w', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
 
-        # Write header
         csv_writer.writerow(['Record', 'Atom', 'Residue', 'Chain', 'X', 'Y', 'Z', 'B-Factor'])
 
-        # Write data
         for model in structure:
             for chain in model:
                 for residue in chain:
                     for atom in residue:
                         row = [
-                            atom.get_full_id()[0],  # Record type (ATOM or HETATM)
-                            atom.get_name(),        # Atom name
-                            residue.get_resname(),   # Residue name
-                            chain.get_id(),          # Chain identifier
-                            *atom.get_coord(),       # X, Y, Z coordinates
-                            atom.get_bfactor()       # B-factor
+                            atom.get_full_id()[0],  
+                            atom.get_name(),       
+                            residue.get_resname(), 
+                            chain.get_id(),
+                            *atom.get_coord(),  
+                            atom.get_bfactor()
                         ]
                         csv_writer.writerow(row)
 
@@ -42,30 +40,24 @@ def process_loops(structure):
                     current_loop.append(residues[i])
                 else:
                     if len(current_loop) > 1:
-                        # Calculate average B-factor for the loop
                         b_factors = [atom.get_bfactor() for residue in current_loop for atom in residue.get_atoms()]
                         loop_data['b_factors'].extend(b_factors)
 
-                        #store residue information
                         loop_data['residues'].extend([(residue.get_resname(), residue.id[1]) for residue in current_loop])
 
-                    #start a new loop
+                   
                     current_loop = [residues[i]]
 
-            #check if the last loop needs to processed
             if len(current_loop) > 1:
                 b_factors = [atom.get_bfactor() for residue in current_loop for atom in residue.get_atoms()]
                 loop_data['b_factors'].extend(b_factors)
                 loop_data['residues'].extend([(residue.get_resname(), residue.id[1]) for residue in current_loop])
 
 
-            # Calculate mean and standard deviation for B-factors
             if loop_data['b_factors']:
                 loop_data['avg_b_factor'] = sum(loop_data['b_factors']) / len(loop_data['b_factors'])
                 loop_data['std_b_factor'] = (sum((bf - loop_data['avg_b_factor']) ** 2 for bf in loop_data['b_factors']) / len(loop_data['b_factors'])) ** 0.5
             
-
-            # Store loop information
                 loop_id = f"loop_{len(loops) + 1}"
                 loops[loop_id].append(loop_data)    
 
@@ -91,16 +83,14 @@ def print_loop_details(loops):
             print(f"    {residue[0].ljust(16)}{residue[1]}")
 
 if __name__ == "__main__":
-    pdb_file = '8tim.pdb'  # Replace with your PDB file path
+    pdb_file = '8tim.pdb'  
     pdb_parser = PDB.PDBParser(QUIET=True)
     structure = pdb_parser.get_structure('structure', pdb_file)
 
     loops = process_loops(structure)
 
-    # Print loop summary
     print_loop_summary(loops)
 
-    # Print loop details
     print_loop_details(loops)
 
 
