@@ -1,37 +1,67 @@
-# PDB to CSV Converter and Loop Analyzer
+# PDB to CSV Conversion and Loop Analysis
 
-The provided Python script utilizes the Biopython library to convert a PDB (Protein Data Bank) file to a CSV (Comma-Separated Values) file and analyzes loops in the protein structure.
+## pdb_to_csv Function
 
-## PDB to CSV Conversion Function
+Converts a PDB file to a CSV file, extracting relevant information.
 
-The script defines a function `pdb_to_csv` that converts PDB file data into a CSV format. It extracts information such as atom details, residue names, chain identifiers, and coordinates, writing this information to a specified CSV file.
+### Parameters:
+- `pdb_file` (str): Path to the input PDB file.
+- `csv_file` (str): Path to the output CSV file.
 
+### Usage:
 ```python
 from Bio import PDB
 import csv
+import pandas as pd
+from collections import defaultdict
 
 def pdb_to_csv(pdb_file, csv_file):
-    # PDB parser object
-    structure = PDB.PDBParser(QUIET=True).get_structure('structure', pdb_file)
+    """
+    Converts a PDB file to a CSV file, extracting relevant information.
+    
+    Args:
+        pdb_file (str): Path to the input PDB file.
+        csv_file (str): Path to the output CSV file.
+    
+    Returns:
+        None
+    """
+```
+## process_loops Function
+Processes loops in a given protein structure and calculates loop properties.
 
-    # Write CSV file
-    with open(csv_file, 'w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile)
+### Parameters
+- `structure `(Bio.PDB.Structure.Structure): Input protein structure.
+- `loops` (dict): Dictionary containing information about identified loops.
 
-        # Write header
-        csv_writer.writerow(['Record', 'Atom', 'Residue', 'Chain', 'X', 'Y', 'Z', 'B-Factor'])
+### Usage
+```python
+def process_loops(structure):
+    """
+    Process loops in a given protein structure and calculate loop properties.
+    
+    Args:
+        structure (Bio.PDB.Structure.Structure): Input protein structure.
+    
+    Returns:
+        dict: Dictionary containing information about identified loops.
+    """
+```
+## print_loop_summary Function
+Prints a summary of loop properties.
 
-        # Write data
-        for model in structure:
-            for chain in model:
-                for residue in chain:
-                    for atom in residue:
-                        row = [
-                            atom.get_full_id()[0],  # Record type (ATOM or HETATM)
-                            atom.get_name(),        # Atom name
-                            residue.get_resname(),   # Residue name
-                            chain.get_id(),          # Chain identifier
-                            *atom.get_coord(),       # X, Y, Z coordinates
-                            atom.get_bfactor()       # B-factor
-                        ]
-                        csv_writer.writerow(row)
+### Parameters:
+- `loops` (dict): Dictionary containing information about identified loops.
+### Usage:
+```python
+def print_loop_summary(loops):
+    """
+    Print a summary of loop properties.
+    
+    Args:
+        loops (dict): Dictionary containing information about identified loops.
+    
+    Returns:
+        None
+    """
+```
