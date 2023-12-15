@@ -6,10 +6,8 @@ def read_msa_file(file_path):
 def Calculate_amino_acid_usage(msa_lines):
     amino_acid_usage = []
 
-    #extract amino acid sequences for each sequence in the msa
     sequences = [line.split()[-1] for line in msa_lines if line.strip() and not line.startswith(' ')]
 
-    # calculate amino acid usage at each position
     max_length = max(map(len, sequences))
 
     for position in range(max_length):
@@ -29,11 +27,8 @@ def print_amino_acid_usage(amino_acid_usage):
 if __name__ == "__main__":
     msa_file_path = 'msa results.txt'
 
-    #read the msa file
     msa_lines = read_msa_file(msa_file_path)
 
-    # calculate amino acid usage
     amino_acid_usage = Calculate_amino_acid_usage(msa_lines)
 
-    # print amino acid usage for each position
     print_amino_acid_usage(amino_acid_usage)                    
