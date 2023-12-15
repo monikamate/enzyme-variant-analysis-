@@ -1,46 +1,78 @@
-# Python Code in Markdown (.md) Format
+# Multiple Sequence Alignment (MSA) Analysis
 
+## Reading MSA File
+
+Reading a multiple sequence alignment (MSA) file and returning its content as a list of lines.
+
+### Parameters:
+- `file_path` (str): Path to the MSA file.
+
+### Returns:
+- `msa_lines` (list): List of lines from the MSA file.
+
+### Usage:
 ```python
 def read_msa_file(file_path):
-    # Open and read the contents of the specified file
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-    return lines
 
-def calculate_amino_acid_usage(msa_lines):
-    # Initialize an empty list to store amino acid usage at each position
-    amino_acid_usage = []
+    Read content from a multiple sequence alignment (MSA) file.
 
-    # Extract amino acid sequences for each sequence in the MSA
-    sequences = [line.split()[-1] for line in msa_lines if line.strip() and not line.startswith(' ')]
+    Args:
+        file_path (str): Path to the MSA file.
 
-    # Calculate amino acid usage at each position
-    max_length = max(map(len, sequences))
+    Returns:
+        list: List of lines from the MSA file.
+```
+## Calculating Amino Acid Usage
+Calculating amino acid usage for each position in the MSA.
 
-    for position in range(max_length):
-        amino_acids_at_position = [seq[position] if position < len(seq) else '-' for seq in sequences]
-        amino_acid_count = {aa: amino_acids_at_position.count(aa) for aa in set(amino_acids_at_position)}
-        amino_acid_usage.append(amino_acid_count)
+### Parameters:
+- `msa_lines` (list): List of lines from the MSA file.
+### Returns:
+- `amino_acid_usage` (list): List of dictionaries representing amino acid counts at each position.
+### Usage:
+```python
+def Calculate_amino_acid_usage(msa_lines):
 
-    return amino_acid_usage
+    Calculate amino acid usage for each position in the MSA.
 
+    Args:
+        msa_lines (list): List of lines from the MSA file.
+
+    Returns:
+        list: List of dictionaries representing amino acid counts at each position.
+
+```
+## Printing Amino Acid Usage
+Printing amino acid usage for each position in the MSA.
+
+### Parameters:
+- `amino_acid_usage` (list): List of dictionaries representing amino acid counts at each position.
+### Usage:
+```python
 def print_amino_acid_usage(amino_acid_usage):
-    # Print amino acid usage for each position
-    for position, counts in enumerate(amino_acid_usage, start=1):
-        print(f"Position {position}:")
 
-        for amino_acid, count in counts.items():
-            print(f"  {amino_acid}: {count}")
+    Print amino acid usage for each position in the MSA.
 
+    Args:
+        amino_acid_usage (list): List of dictionaries representing amino acid counts at each position.
+
+    Returns:
+        None
+```
+## Main Section
+Handling the execution of the script.
+
+### Usage:
+```python
 if __name__ == "__main__":
-    # Set the path to the MSA file
     msa_file_path = 'msa results.txt'
 
-    # Read the MSA file
+    #read the msa file
     msa_lines = read_msa_file(msa_file_path)
 
-    # Calculate amino acid usage
-    amino_acid_usage = calculate_amino_acid_usage(msa_lines)
+    # calculate amino acid usage
+    amino_acid_usage = Calculate_amino_acid_usage(msa_lines)
 
-    # Print amino acid usage for each position
+    # print amino acid usage for each position
     print_amino_acid_usage(amino_acid_usage)
+```
